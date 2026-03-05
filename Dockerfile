@@ -25,9 +25,13 @@ RUN userdel admin \
     # && printf 'PermitRootLogin yes\nPasswordAuthentication yes\nPermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
     # Install useful stuff
     && apt-get update && apt-get install -y dnsutils git nano curl wget ca-certificates \
+    # Node and Python version managers
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && rm -rf /var/lib/apt/lists/*
 
 # Proxy setup
 COPY certs/my_ca.crt /usr/local/share/ca-certificates/
-RUN update-ca-certificates 
-RUN printf 'NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt' >> /etc/environment
+RUN update-ca-certificates \
+    && printf 'NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt\n' >> /etc/environment \
+    && printf 'REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt\n' >> /etc/environment
