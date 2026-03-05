@@ -1,0 +1,3 @@
+ollama, see https://docs.ollama.com/faq#setting-environment-variables-on-linux for exposing on 0.0.0.0:11434
+sysbox runtime docker named sysbox-runc
+docker

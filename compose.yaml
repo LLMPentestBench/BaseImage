@@ -1,0 +1,60 @@
+services:
+  envoy:
+    image: envoyproxy/envoy:dev-d568d57938c13d36f46405290d6a2a5e2ceed710
+    depends_on:
+      - litellm
+    networks:
+      proxynet:
+        aliases:
+          - api.openai.com
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./certs/website.crt:/etc/envoy/certs/website.crt
+      - ./certs/website.key:/etc/envoy/certs/website.key
+  
+  litellm:
+    image: docker.litellm.ai/berriai/litellm:main-stable
+    ports:
+      - "127.0.0.1:4000:4000"
+    environment:
+      DATABASE_URL: "postgresql://llmproxy:F9JUJIIN8LIVZr13@db:5432/litellm"
+      STORE_MODEL_IN_DB: "True"
+      LITELLM_MASTER_KEY: "j5IPL7IeW*t#p&Bv"
+      LITELLM_SALT_KEY: "T#MJ^X6Q8zWOKvJy"
+    extra_hosts:
+      - host.docker.internal=host-gateway
+    depends_on:
+      - db
+    networks:
+      - proxynet
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: llmproxy
+      POSTGRES_PASSWORD: F9JUJIIN8LIVZr13
+    networks:
+      - proxynet
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+
+
+networks:
+  proxynet:
+    name: mt_proxynet
+    driver: bridge
