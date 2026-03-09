@@ -24,7 +24,7 @@ RUN userdel admin \
     # && passwd -d root \
     # && printf 'PermitRootLogin yes\nPasswordAuthentication yes\nPermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
     # Install useful stuff
-    && apt-get update && apt-get install -y dnsutils git nano curl wget htop ca-certificates \
+    && apt-get update && apt-get install -y dnsutils git nano curl wget htop unzip ca-certificates \
     # Node and Python version managers
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash \
     && curl -LsSf https://astral.sh/uv/install.sh | sh
