@@ -27,7 +27,7 @@ static_resources:
                             prefix: "/"
                           route:
                             cluster: mycluster
-                            timeout: 600s # Set upstream request timeout
+                            timeout: 600s
 
                 http_filters:
                   - name: envoy.filters.http.router
@@ -71,7 +71,7 @@ static_resources:
                             prefix: "/"
                           route:
                             cluster: mycluster
-                            timeout: 600s # Set upstream request timeout
+                            timeout: 600s
 
                 http_filters:
                   - name: envoy.filters.http.router
