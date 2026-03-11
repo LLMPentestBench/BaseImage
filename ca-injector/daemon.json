@@ -1,0 +1,8 @@
+{
+  "default-runtime": "ca-injector",
+  "runtimes": {
+    "ca-injector": {
+      "path": "/usr/local/bin/ca-injector-runtime"
+    }
+  }
+}

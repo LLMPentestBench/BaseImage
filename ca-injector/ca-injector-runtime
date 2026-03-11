@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+CA_CERT_HOST_PATH="/etc/ssl/certs/my_ca.crt"
+CA_CERT_CONTAINER_PATH="/usr/local/share/ca-certificates/my_ca.crt"
+
+# Only intercept the "create" subcommand — pass everything else straight through
+if [[ " $* " =~ " create " ]]; then
+    BUNDLE_DIR=""
+    args=("$@")
+    for i in "${!args[@]}"; do
+        if [[ "${args[$i]}" == "--bundle" || "${args[$i]}" == "-b" ]]; then
+            BUNDLE_DIR="${args[$((i+1))]}"
+            break
+        fi
+    done
+
+    if [[ -n "$BUNDLE_DIR" && -f "$BUNDLE_DIR/config.json" ]]; then
+        python3 /usr/local/bin/inject-ca-cert.py \
+            "$BUNDLE_DIR/config.json" \
+            "$CA_CERT_HOST_PATH" \
+            "$CA_CERT_CONTAINER_PATH"
+    fi
+fi
+
+exec /usr/bin/runc "$@"

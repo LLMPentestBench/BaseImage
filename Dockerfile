@@ -36,3 +36,11 @@ RUN update-ca-certificates \
     && printf 'NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt\n' >> /etc/environment \
     && printf 'REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt\n' >> /etc/environment \
     && printf 'SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\n' >> /etc/environment
+
+# TODO proof of concept for CA injection
+# COPY ca-injector/ca-injector-runtime /usr/local/bin/ca-injector-runtime
+# COPY ca-injector/inject-ca-cert.py   /usr/local/bin/inject-ca-cert.py
+# COPY ca-injector/daemon.json         /etc/docker/daemon.json
+
+# RUN chmod +x /usr/local/bin/ca-injector-runtime /usr/local/bin/inject-ca-cert.py \
+#     && apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
