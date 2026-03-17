@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
 
-docker build -t tp-dind:latest .
+docker build -t mt-baseimage:latest .
 ./run.sh
