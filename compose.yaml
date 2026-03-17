@@ -1,6 +1,7 @@
 services:
   envoy:
     image: envoyproxy/envoy:dev-d568d57938c13d36f46405290d6a2a5e2ceed710
+    restart: unless-stopped
     depends_on:
       - litellm
     networks:
@@ -15,6 +16,7 @@ services:
   
   litellm:
     image: docker.litellm.ai/berriai/litellm:main-stable
+    restart: unless-stopped
     ports:
       - "127.0.0.1:4000:4000"
     environment:
@@ -39,7 +41,7 @@ services:
 
   db:
     image: postgres:16
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: litellm
       POSTGRES_USER: llmproxy
