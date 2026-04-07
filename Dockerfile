@@ -27,7 +27,9 @@ RUN userdel admin \
     && apt-get update && apt-get install -y dnsutils git nano curl wget htop unzip ca-certificates make \
     # Node and Python version managers
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    # Install tinyproxy
+    && apt-get install -y tinyproxy && printf 'Allow 172.16.0.0/12\n' >> /etc/tinyproxy/tinyproxy.conf
     # && rm -rf /var/lib/apt/lists/*
 
 # Proxy setup
