@@ -11,11 +11,6 @@ static_resources:
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 stat_prefix: ingress_http
-                codec_type: AUTO
-
-                use_remote_address: true
-                skip_xff_append: false
-                via: ""
 
                 route_config:
                   name: local_route
@@ -55,11 +50,6 @@ static_resources:
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 stat_prefix: ingress_https
-                codec_type: AUTO
-
-                use_remote_address: true
-                skip_xff_append: false
-                via: ""
 
                 route_config:
                   name: local_route_tls
@@ -80,7 +70,6 @@ static_resources:
 
   clusters:
     - name: mycluster
-      connect_timeout: 600s
       type: LOGICAL_DNS
       dns_lookup_family: V4_ONLY
       load_assignment:
