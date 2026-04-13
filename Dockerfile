@@ -1,3 +1,5 @@
+FROM envoyproxy/envoy:v1.37-latest AS envoy-source
+
 FROM nestybox/ubuntu-noble-systemd-docker:latest
 
 # auto logon (without restart)
@@ -16,6 +18,11 @@ RUN mkdir -p /etc/systemd/system.conf.d /etc/sysctl.d && \
         > /etc/systemd/system.conf.d/quiet.conf && \
     printf 'kernel.printk = 3 4 1 3\n' > /etc/sysctl.d/99-silence.conf
 
+# Install Envoy with service
+COPY --from=envoy-source /usr/local/bin/envoy /usr/local/bin/envoy
+COPY envoy-internal.yaml /etc/envoy/envoy.yaml
+COPY envoy.service /etc/systemd/system/envoy.service
+
 RUN userdel admin \
     # Make bash look nicer
     && sed -Ei 's/^#(force_color_prompt=yes)/\1/' /root/.bashrc \
@@ -24,12 +31,14 @@ RUN userdel admin \
     # && passwd -d root \
     # && printf 'PermitRootLogin yes\nPasswordAuthentication yes\nPermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
     # Install useful stuff
-    && apt-get update && apt-get install -y dnsutils git nano curl wget htop unzip ca-certificates make \
+    && apt-get update && apt-get install -y dnsutils git nano curl wget htop unzip ca-certificates make gpg \
     # Node and Python version managers
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
     # Install tinyproxy
-    && apt-get install -y tinyproxy && printf 'Allow 172.16.0.0/12\n' >> /etc/tinyproxy/tinyproxy.conf
+    && apt-get install -y tinyproxy && printf 'Allow 172.16.0.0/12\n' >> /etc/tinyproxy/tinyproxy.conf \
+    # Enable Envoy service (without systemctl, as it isn't loaded at build time)
+    && ln -s /etc/systemd/system/envoy.service /etc/systemd/system/multi-user.target.wants/envoy.service
     # && rm -rf /var/lib/apt/lists/*
 
 # Proxy setup

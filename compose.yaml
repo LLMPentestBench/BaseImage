@@ -1,6 +1,6 @@
 services:
   envoy:
-    image: envoyproxy/envoy:dev-d568d57938c13d36f46405290d6a2a5e2ceed710
+    image: envoyproxy/envoy:v1.37-latest
     restart: unless-stopped
     depends_on:
       - litellm
@@ -10,7 +10,7 @@ services:
           - api.openai.com
           - llmproxy
     volumes:
-      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./envoy-proxy.yaml:/etc/envoy/envoy.yaml
       - ./certs/website.crt:/etc/envoy/certs/website.crt
       - ./certs/website.key:/etc/envoy/certs/website.key
   
