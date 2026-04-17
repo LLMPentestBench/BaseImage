@@ -1,27 +1,102 @@
 model_list:
-  - model_name: vast-gemma4:26b
+  # Local Ollama models
+  - model_name: local-qwen3:4b
     litellm_params:
-      model: openai/gemma4:26b
-      litellm_credential_name: vast_ai_ollama
+      model: openai/qwen3:4b
+      litellm_credential_name: local_ollama
+  - model_name: local-embeddinggemma
+    litellm_params:
+      model: openai/embeddinggemma
+      litellm_credential_name: local_ollama
+  
+  # Desktop Ollama models
+  - model_name: desktop-qwen2.5:1.5b
+    litellm_params:
+      model: openai/qwen2.5:1.5b
+      litellm_credential_name: desktop_ollama
+
+  # Anthropic models
   - model_name: claude-haiku-4-5
     litellm_params:
       model: claude-haiku-4-5
       litellm_credential_name: anthropic
+  
+  # OpenAI models
+  - model_name: gpt-5-nano
+    litellm_params:
+      model: gpt-5-nano
+      litellm_credential_name: openai
+
+  # Together.ai models
+  - model_name: togetherai-gemma-4-31b-it
+    litellm_params:
+      model: openai/google/gemma-4-31b-it
+      litellm_credential_name: togetherai
+  - model_name: togetherai-gpt-oss-20b
+    litellm_params:
+      model: openai/openai/gpt-oss-20b
+      litellm_credential_name: togetherai
+  
+  # Cerebras models
+  - model_name: cerebras-llama3.1-8b
+    litellm_params:
+      model: openai/llama3.1-8b
+      litellm_credential_name: cerebras
+  
+  # Vast.ai models (Ollama / vLLM)
+  - model_name: vast-gemma4:26b
+    litellm_params:
+      model: openai/gemma4:26b
+      litellm_credential_name: vast_ai
+  
 
 credential_list:
-  - credential_name: vast_ai_ollama
+  - credential_name: local_ollama
+    credential_values:
+      api_key: "sk-123" # not needed, Ollama
+      api_base: "http://host.docker.internal:11434/v1"
+    credential_info:
+      description: "Local Ollama instance"
+      custom_llm_provider: "openai_compatible"
+  
+  - credential_name: desktop_ollama
+    credential_values:
+      api_key: "sk-123" # not needed, Ollama
+      api_base: "http://100.76.105.2:11434/v1"
+    credential_info:
+      description: "Desktop Ollama instance"
+      custom_llm_provider: "openai_compatible"
+  
+  - credential_name: openai
+    credential_values:
+      api_key: "os.environ/OPENAI_API_KEY"
+    credential_info:
+      description: "OpenAI API"
+      custom_llm_provider: "openai"
+  
+  - credential_name: togetherai
+    credential_values:
+      api_key: "os.environ/TOGETHERAI_API_KEY"
+      api_base: "https://api.together.xyz/v1"
+    credential_info:
+      description: "Together.ai API"
+      custom_llm_provider: "openai"
+  
+  - credential_name: cerebras
+    credential_values:
+      api_key: "os.environ/CERERAS_API_KEY"
+      api_base: "https://api.cerebras.ai/v1"
+    credential_info:
+      description: "Cerebras API"
+      custom_llm_provider: "openai"
+  
+  - credential_name: vast_ai
     credential_values:
       api_key: "os.environ/VAST_AI_KEY"
       api_base: "os.environ/VAST_AI_API_BASE"
     credential_info:
-      description: "Vast.ai Ollama instances"
+      description: "Vast.ai instances"
       custom_llm_provider: "openai_compatible"
-  - credential_name: anthropic
-    credential_values:
-      api_key: "os.environ/ANTHROPIC_API_KEY"
-    credential_info:
-      description: "Anthropic API"
-      custom_llm_provider: "anthropic"
 
 litellm_settings:
   drop_params: True

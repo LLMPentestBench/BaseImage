@@ -29,7 +29,7 @@ services:
       LITELLM_SALT_KEY: "T#MJ^X6Q8zWOKvJy"
     extra_hosts:
       - host.docker.internal=host-gateway
-      - api.openai.com=172.66.0.243 # from `dig +short api.openai.com`
+      - api.openai.com=172.66.0.243 # from `dig +short api.openai.com`, to avoid envoy proxy openai catch
     depends_on:
       - db
     volumes:
