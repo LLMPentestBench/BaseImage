@@ -49,6 +49,7 @@ model_list:
       model: openai/gemma4:26b
       litellm_credential_name: vast_ai
   
+  # Claude Code aliases
   - model_name: cc-high # Do not include names like 'opus' in model alias name, as it causes LiteLLM to treat them as a Responses API-supporting model
     litellm_params: *claude-code-model
   - model_name: cc-medium
