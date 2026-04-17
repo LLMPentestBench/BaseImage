@@ -29,7 +29,7 @@ model_list:
 
   # Together.ai models
   - model_name: togetherai-gemma-4-31b-it
-    litellm_params:
+    litellm_params: &claude-code-model
       model: openai/google/gemma-4-31b-it
       litellm_credential_name: togetherai
   - model_name: togetherai-gpt-oss-20b
@@ -48,6 +48,13 @@ model_list:
     litellm_params:
       model: openai/gemma4:26b
       litellm_credential_name: vast_ai
+  
+  - model_name: cc-high # Do not include names like 'opus' in model alias name, as it causes LiteLLM to treat them as a Responses API-supporting model
+    litellm_params: *claude-code-model
+  - model_name: cc-medium
+    litellm_params: *claude-code-model
+  - model_name: cc-low
+    litellm_params: *claude-code-model
   
 
 credential_list:
@@ -99,7 +106,7 @@ credential_list:
       custom_llm_provider: "openai_compatible"
 
 litellm_settings:
-  drop_params: True
+  drop_params: true
 
 general_settings:
   store_prompts_in_spend_logs: true
