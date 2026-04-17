@@ -19,9 +19,12 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:4000:4000"
+    env_file:
+      - .env
+      - .env.vastai
     environment:
       DATABASE_URL: "postgresql://llmproxy:F9JUJIIN8LIVZr13@db:5432/litellm"
-      STORE_MODEL_IN_DB: "True"
+      STORE_MODEL_IN_DB: "False"
       LITELLM_MASTER_KEY: "j5IPL7IeW*t#p&Bv"
       LITELLM_SALT_KEY: "T#MJ^X6Q8zWOKvJy"
     extra_hosts:
@@ -29,8 +32,13 @@ services:
       - api.openai.com=172.66.0.243 # from `dig +short api.openai.com`
     depends_on:
       - db
+    volumes:
+      - ./proxy_server_config.yaml:/app/config.yaml
     networks:
       - proxynet
+    command:
+      - "--config"
+      - "/app/config.yaml"
     healthcheck:
       test:
         - CMD-SHELL

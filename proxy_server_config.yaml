@@ -1,0 +1,30 @@
+model_list:
+  - model_name: vast-gemma4:26b
+    litellm_params:
+      model: openai/gemma4:26b
+      litellm_credential_name: vast_ai_ollama
+  - model_name: claude-haiku-4-5
+    litellm_params:
+      model: claude-haiku-4-5
+      litellm_credential_name: anthropic
+
+credential_list:
+  - credential_name: vast_ai_ollama
+    credential_values:
+      api_key: "os.environ/VAST_AI_KEY"
+      api_base: "os.environ/VAST_AI_API_BASE"
+    credential_info:
+      description: "Vast.ai Ollama instances"
+      custom_llm_provider: "openai_compatible"
+  - credential_name: anthropic
+    credential_values:
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+    credential_info:
+      description: "Anthropic API"
+      custom_llm_provider: "anthropic"
+
+litellm_settings:
+  drop_params: True
+
+general_settings:
+  store_prompts_in_spend_logs: true
