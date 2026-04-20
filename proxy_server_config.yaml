@@ -29,7 +29,7 @@ model_list:
 
   # Together.ai models
   - model_name: togetherai-gemma-4-31b-it
-    litellm_params: &claude-code-model
+    litellm_params:
       model: openai/google/gemma-4-31b-it
       litellm_credential_name: togetherai
   - model_name: togetherai-gpt-oss-20b
@@ -45,17 +45,25 @@ model_list:
   
   # Vast.ai models (Ollama / vLLM)
   - model_name: vast-gemma4:26b
-    litellm_params:
+    litellm_params: &vast-gemma4-26b-params
       model: openai/gemma4:26b
       litellm_credential_name: vast_ai
   
   # Claude Code aliases
   - model_name: cc-high # Do not include names like 'opus' in model alias name, as it causes LiteLLM to treat them as a Responses API-supporting model
-    litellm_params: *claude-code-model
+    litellm_params: *vast-gemma4-26b-params
   - model_name: cc-medium
-    litellm_params: *claude-code-model
+    litellm_params: *vast-gemma4-26b-params
   - model_name: cc-low
-    litellm_params: *claude-code-model
+    litellm_params: *vast-gemma4-26b-params
+  
+  # Agent model aliases
+  - model_name: pentagi
+    litellm_params: *vast-gemma4-26b-params
+  - model_name: pentestgpt
+    litellm_params: *vast-gemma4-26b-params
+  - model_name: cybersecurity-ai
+    litellm_params: *vast-gemma4-26b-params
   
 
 credential_list:
