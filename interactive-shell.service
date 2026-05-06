@@ -1,0 +1,23 @@
+[Unit]
+Description=Interactive Shell Session
+After=multi-user.target
+Requires=multi-user.target
+Conflicts=console-getty.service
+Before=console-getty.service
+
+[Service]
+Type=simple
+WorkingDirectory=/root
+User=root
+ExecStart=/bin/bash --login
+StandardInput=tty
+StandardOutput=tty
+StandardError=tty
+TTYPath=/dev/console
+TTYReset=yes
+TTYVHangup=yes
+KillMode=process
+ExecStopPost=/bin/systemctl poweroff --no-block
+
+[Install]
+WantedBy=multi-user.target2

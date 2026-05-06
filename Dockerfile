@@ -2,15 +2,8 @@ FROM envoyproxy/envoy:v1.37-latest AS envoy-source
 
 FROM nestybox/ubuntu-noble-systemd-docker:latest
 
-# auto logon (without restart)
-RUN mkdir -p /etc/systemd/system/console-getty.service.d && \
-    printf '[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear console linux\nRestart=no\n' \
-        > /etc/systemd/system/console-getty.service.d/autologin.conf && \
-    systemctl enable console-getty.service
-
-# on logout, poweroff systemd so the container exits
-RUN printf 'if command -v systemctl >/dev/null 2>&1; then\n  systemctl poweroff --force --no-wall || poweroff -f || shutdown -h now\nfi\n' \
-        > /root/.bash_logout
+COPY interactive-shell.service /etc/systemd/system/interactive-shell.service
+RUN ln -s /etc/systemd/system/interactive-shell.service /etc/systemd/system/multi-user.target.wants/interactive-shell.service
 
 # quiet systemd output and lower kernel console verbosity
 RUN mkdir -p /etc/systemd/system.conf.d /etc/sysctl.d && \
