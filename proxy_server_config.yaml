@@ -17,8 +17,12 @@ model_list:
 
   # Anthropic models
   - model_name: claude-haiku-4-5
-    litellm_params:
+    litellm_params: &claude-haiku-4-5-params
       model: claude-haiku-4-5
+      litellm_credential_name: anthropic
+  - model_name: claude-sonnet-4-6
+    litellm_params: &claude-sonnet-4-6-params
+      model: claude-sonnet-4-6
       litellm_credential_name: anthropic
   
   # OpenAI models
@@ -29,7 +33,7 @@ model_list:
 
   # Together.ai models
   - model_name: togetherai-gemma-4-31b-it
-    litellm_params:
+    litellm_params: &togetherai-gemma4-31b-it-params
       model: openai/google/gemma-4-31b-it
       litellm_credential_name: togetherai
   - model_name: togetherai-gpt-oss-20b
@@ -39,7 +43,7 @@ model_list:
   
   # Cerebras models
   - model_name: cerebras-llama3.1-8b
-    litellm_params:
+    litellm_params: &cerebras-llama3-1-8b-params
       model: openai/llama3.1-8b
       litellm_credential_name: cerebras
   
@@ -51,11 +55,11 @@ model_list:
   
   # Claude Code aliases
   - model_name: cc-high # Do not include names like 'opus' in model alias name, as it causes LiteLLM to treat them as a Responses API-supporting model
-    litellm_params: *vast-gemma4-26b-params
+    litellm_params: *togetherai-gemma4-31b-it-params
   - model_name: cc-medium
-    litellm_params: *vast-gemma4-26b-params
+    litellm_params: *togetherai-gemma4-31b-it-params
   - model_name: cc-low
-    litellm_params: *vast-gemma4-26b-params
+    litellm_params: *togetherai-gemma4-31b-it-params
   
   # Agent model aliases
   - model_name: pentagi
@@ -83,6 +87,13 @@ credential_list:
       description: "Desktop Ollama instance"
       custom_llm_provider: "openai_compatible"
   
+  - credential_name: anthropic
+    credential_values:
+      api_key: "os.environ/ANTHROPIC_API_KEY"
+    credential_info:
+      description: "Anthropic API"
+      custom_llm_provider: "anthropic"
+
   - credential_name: openai
     credential_values:
       api_key: "os.environ/OPENAI_API_KEY"
