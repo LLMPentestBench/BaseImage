@@ -9,6 +9,7 @@ Before=console-getty.service
 Type=simple
 WorkingDirectory=/root
 User=root
+EnvironmentFile=/etc/environment
 ExecStart=/bin/bash --login
 StandardInput=tty
 StandardOutput=tty

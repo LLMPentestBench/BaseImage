@@ -37,9 +37,16 @@ RUN userdel admin \
 # Proxy setup
 COPY certs/my_ca.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates \
-    && printf 'NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt\n' >> /etc/environment \
-    && printf 'REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt\n' >> /etc/environment \
-    && printf 'SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\n' >> /etc/environment
+    && printf '\
+NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt\n\
+REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt\n\
+SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\n\
+ABC=123\n' >> /etc/environment
+
+# Double env var config, one for systemd bash and the other for processes started with docker exec
+ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt \
+    REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \
+    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
 # TODO proof of concept for CA injection
 # COPY ca-injector/ca-injector-runtime /usr/local/bin/ca-injector-runtime
