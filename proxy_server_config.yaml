@@ -41,22 +41,6 @@ model_list:
       model: openai/llama3.1-8b
       litellm_credential_name: cerebras
   
-  # Clarifai models
-  # - model_name: clarifai-qwen3.6-35b
-  #   litellm_params: &clarifai-qwen3-6-35b-params
-  #     model: clarifai/openai.chat-completion.Qwen3_6-35B-A3B-FP8
-  #     litellm_credential_name: clarifai
-  # - model_name: clarifai-qwen3.5-397b
-  #   litellm_params: &clarifai-qwen3-5-397b-params
-  #     model: clarifai/qwen.qwenLM.Qwen3_5-397B-A17B
-  #     litellm_credential_name: clarifai
-  #     model_info:
-  #       custom_tool_call_parser: qwen
-  - model_name: clarifai-kimi-k2.5
-    litellm_params: &clarifai-kimi-k2-5-params
-      model: openai/Kimi-K2_5
-      litellm_credential_name: clarifai
-  
   # Vast.ai models (Ollama / vLLM)
   - model_name: vast-gemma4:26b
     litellm_params: &vast-gemma4-26b-params
@@ -118,15 +102,7 @@ credential_list:
     credential_info:
       description: "Cerebras API"
       custom_llm_provider: "openai"
-  
-  - credential_name: clarifai
-    credential_values:
-      api_key: "os.environ/CLARIFAI_API_KEY"
-      api_base: "https://api.clarifai.com/v2/ext/openai/v1"
-    credential_info:
-      description: "Clarifai API"
-      custom_llm_provider: "openai"
-  
+
   - credential_name: vast_ai
     credential_values:
       api_key: "os.environ/VAST_AI_KEY"
