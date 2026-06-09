@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
 
-docker build -t mt-baseimage:latest .
+docker build -t llmptb-baseimage:latest .
 ./run.sh
