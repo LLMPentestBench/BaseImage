@@ -35,7 +35,7 @@ RUN userdel admin \
     # && rm -rf /var/lib/apt/lists/*
 
 # Proxy setup
-COPY certs/my_ca.crt /usr/local/share/ca-certificates/
+COPY my_ca.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates \
     && printf '\
 NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt\n\
