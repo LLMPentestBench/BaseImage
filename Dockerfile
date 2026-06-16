@@ -27,12 +27,15 @@ RUN userdel admin \
     && apt-get update && apt-get install -y dnsutils git nano curl wget htop unzip ca-certificates make gpg \
     # Node and Python version managers
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && env UV_INSTALL_DIR="/usr/local/bin" sh -c "$(curl -LsSf https://astral.sh/uv/install.sh)" \
     # Install tinyproxy
     && apt-get install -y tinyproxy && printf 'Allow 172.16.0.0/12\n' >> /etc/tinyproxy/tinyproxy.conf \
     # Enable Envoy service (without systemctl, as it isn't loaded at build time)
     && ln -s /etc/systemd/system/envoy.service /etc/systemd/system/multi-user.target.wants/envoy.service
     # && rm -rf /var/lib/apt/lists/*
+
+COPY localbin.env /root/.local/bin/env
+RUN printf "\n. "$HOME/.local/bin/env"\n" >> /root/.profile
 
 # Proxy setup
 COPY my_ca.crt /usr/local/share/ca-certificates/
@@ -40,8 +43,7 @@ RUN update-ca-certificates \
     && printf '\
 NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt\n\
 REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt\n\
-SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\n\
-ABC=123\n' >> /etc/environment
+SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\n' >> /etc/environment
 
 # Double env var config, one for systemd bash and the other for processes started with docker exec
 ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt \
