@@ -45,6 +45,12 @@ NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt\n\
 REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt\n\
 SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt\n' >> /etc/environment
 
+# Docker image loading setup
+COPY docker-preload.service /etc/systemd/system/docker-preload.service
+COPY docker-preload.sh /usr/local/bin/docker-preload.sh
+RUN chmod +x /usr/local/bin/docker-preload.sh && \
+    systemctl enable docker-preload.service
+
 # Double env var config, one for systemd bash and the other for processes started with docker exec
 ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/my_ca.crt \
     REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \

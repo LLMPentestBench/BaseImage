@@ -1,0 +1,12 @@
+[Unit]
+Description=Preload Docker images into daemon
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/docker-preload.sh
+
+[Install]
+WantedBy=multi-user.target
